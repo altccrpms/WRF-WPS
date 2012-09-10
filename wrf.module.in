@@ -1,0 +1,11 @@
+#%Module 1.0
+#
+#  wrf module for use with 'environment-modules' package:
+#
+conflict	wrf
+module load	netcdf-fortran/@MPI@-@CC@
+module load	ncl/@CC@
+
+prepend-path 	PATH 		@PREFIX@/bin
+
+setenv		WRF_DIR		@PREFIX@

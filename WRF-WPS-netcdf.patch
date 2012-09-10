@@ -1,0 +1,16 @@
+diff -up WRF-WPS-intel-3.4.1/WRFV3/external/io_netcdf/makefile.netcdf WRF-WPS-intel-3.4.1/WRFV3/external/io_netcdf/makefile
+--- WRF-WPS-intel-3.4.1/WRFV3/external/io_netcdf/makefile.netcdf	2012-08-02 10:23:15.000000000 -0600
++++ WRF-WPS-intel-3.4.1/WRFV3/external/io_netcdf/makefile	2012-09-05 11:45:08.528320483 -0600
+@@ -49,11 +49,7 @@ diffwrf:                diffwrf.F90
+ 	$(FC) -c $(FFLAGS) diffwrf.f
+ 	@if [ \( -f ../../frame/wrf_debug.o \) -a \( -f ../../frame/module_wrf_error.o \) -a \( -f $(ESMF_MOD_DEPENDENCE) \) -a \( -f ../../frame/clog.o \) ] ; then \
+ 	  echo "diffwrf io_netcdf is being built now. " ; \
+-          if [ \( -f $(NETCDFPATH)/lib/libnetcdff.a \) ] ; then \
+-            $(FC) $(FFLAGS) $(LDFLAGS) -o diffwrf diffwrf.o $(OBJSL) ../../frame/wrf_debug.o ../../frame/module_wrf_error.o ../../frame/clog.o $(ESMF_IO_LIB_EXT) $(LIBS) -L$(NETCDFPATH)/lib -lnetcdff ;\
+-          else \
+-            $(FC) $(FFLAGS) $(LDFLAGS) -o diffwrf diffwrf.o $(OBJSL) ../../frame/wrf_debug.o ../../frame/module_wrf_error.o ../../frame/clog.o $(ESMF_IO_LIB_EXT) $(LIBS) ;\
+-          fi ; \
++          $(FC) $(FFLAGS) $(LDFLAGS) -o diffwrf diffwrf.o $(OBJSL) ../../frame/wrf_debug.o ../../frame/module_wrf_error.o ../../frame/clog.o $(ESMF_IO_LIB_EXT) $(LIBS) -L$(NETCDFPATH)/lib -lnetcdff ;\
+         else \
+ 	   echo "***************************************************************************** " ; \
+ 	   echo "*** Rerun compile to make diffwrf in external/io_netcdf directory         *** " ; \
