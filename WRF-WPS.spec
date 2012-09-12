@@ -60,7 +60,7 @@ srpm.
 %package -n WRF341-openmpi%{?_cc_name_suffix}
 Summary:        WRF Model
 Group:          Scientific
-Requires:       netcdf-fortran%{?_cc_name_suffix}%{?_isa}
+Requires:       netcdf-fortran-openmpi%{?_cc_name_suffix}%{?_isa}
 Provides:       WRF-openmpi-%{_cc_name} = %{version}-%{release}
 
 %description -n WRF341-openmpi%{?_cc_name_suffix}
@@ -70,7 +70,7 @@ WRF Model.  DM parallel, simple nesting.
 %package -n WPS341-openmpi%{?_cc_name_suffix}
 Summary:        WPS Tools
 Group:          Scientific
-Requires:       netcdf-fortran%{?_cc_name_suffix}%{?_isa}
+Requires:       netcdf-fortran-openmpi%{?_cc_name_suffix}%{?_isa}
 Requires:       ncl%{?_cc_name_suffix}%{?_isa}
 Provides:       WPS-openmpi-%{_cc_name} = %{version}-%{release}
 
