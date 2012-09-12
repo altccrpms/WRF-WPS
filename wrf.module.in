@@ -8,3 +8,12 @@ module load	netcdf-fortran/@MPI@-@CC@
 prepend-path 	PATH 		@PREFIX@/bin
 
 setenv		WRF_DIR		@PREFIX@
+
+# Intel version at least needs large stacks
+if { [ module-info mode load ] } {
+    if { [module-info shelltype sh] } {
+        puts "ulimit -s unlimited"
+    } elseif { [module-info shelltype csh] } {
+        puts "limit stacksize unlimited"
+    }
+}
