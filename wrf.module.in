@@ -12,8 +12,8 @@ setenv		WRF_DIR		@PREFIX@
 # Intel version at least needs large stacks
 if { [ module-info mode load ] } {
     if { [module-info shelltype sh] } {
-        puts "ulimit -s unlimited"
+        puts "ulimit -s unlimited;"
     } elseif { [module-info shelltype csh] } {
-        puts "limit stacksize unlimited"
+        puts "limit stacksize unlimited;"
     }
 }
