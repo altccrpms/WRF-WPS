@@ -15,8 +15,6 @@
 # Non gcc compilers don't generate build ids
 %undefine _missing_build_ids_terminate_build
 
-%global shortname wrf
-
 %global mpi_list openmpi
 
 Name:           WRF-WPS341%{?_cc_name_suffix}
@@ -37,6 +35,7 @@ Source2:        configure.wrf
 Source3:        configure.wps
 Source4:        setupwrf.in
 Source5:        wrf.module.in
+Source6:        wps.module.in
 # Fix linking against netcdf
 Patch0:         WRF-WPS-netcdf.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -142,9 +141,15 @@ chmod +x $RPM_BUILD_ROOT%{_bindir}/setupwrf
 #< %SOURCE5 > %{buildroot}/etc/modulefiles/%{shortname}/%{_cc_name}/%{version}-%{_arch}
 for mpi in %{mpi_list}
 do
-mkdir -p %{buildroot}/etc/modulefiles/%{shortname}/${mpi}-%{_cc_name}
+mkdir -p %{buildroot}/etc/modulefiles/wrf/${mpi}-%{_cc_name}
 sed -e 's#@PREFIX@#'%{_prefix}'#' -e 's#@LIB@#%{_lib}#' -e 's#@ARCH@#%{_arch}#' -e 's#@CC@#%{_cc_name}#'  -e 's#@MPI@#'$mpi'#' \
-    < %SOURCE5 > %{buildroot}/etc/modulefiles/%{shortname}/${mpi}-%{_cc_name}/%{version}-%{_arch}
+    < %SOURCE5 > %{buildroot}/etc/modulefiles/wrf/${mpi}-%{_cc_name}/%{version}-%{_arch}
+done
+for mpi in %{mpi_list}
+do
+mkdir -p %{buildroot}/etc/modulefiles/wps/${mpi}-%{_cc_name}
+sed -e 's#@PREFIX@#'%{_prefix}'#' -e 's#@LIB@#%{_lib}#' -e 's#@ARCH@#%{_arch}#' -e 's#@CC@#%{_cc_name}#'  -e 's#@MPI@#'$mpi'#' \
+    < %SOURCE6 > %{buildroot}/etc/modulefiles/wps/${mpi}-%{_cc_name}/%{version}-%{_arch}
 done
 
 
@@ -154,7 +159,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n WRF341-openmpi%{?_cc_name_suffix}
 %doc
-/etc/modulefiles/%{shortname}/openmpi-%{_cc_name}/%{version}-%{_arch}
+/etc/modulefiles/wrf/openmpi-%{_cc_name}/%{version}-%{_arch}
 %{_bindir}/ndown.exe
 %{_bindir}/nup.exe
 %{_bindir}/tc.exe
@@ -165,6 +170,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n WPS341-openmpi%{?_cc_name_suffix}
 %doc
+/etc/modulefiles/wps/openmpi-%{_cc_name}/%{version}-%{_arch}
 %{_bindir}/avg_tsfc.exe
 %{_bindir}/calc_ecmwf_p.exe
 %{_bindir}/g1print.exe

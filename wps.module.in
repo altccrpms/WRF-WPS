@@ -1,0 +1,9 @@
+#%Module 1.0
+#
+#  wps module for use with 'environment-modules' package:
+#
+conflict	wps
+module load	wrf/@MPI@-@CC@
+module load	ncl/@CC@
+
+setenv		WPS_DIR		@PREFIX@
