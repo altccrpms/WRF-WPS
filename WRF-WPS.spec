@@ -60,7 +60,7 @@ srpm.
 %package -n WRF341-openmpi%{?_cc_name_suffix}
 Summary:        WRF Model
 Group:          Scientific
-Requires:       netcdf-fortran%{?_cc_name_suffix}-devel%{?_isa}
+Requires:       netcdf-fortran%{?_cc_name_suffix}%{?_isa}
 Provides:       WRF-openmpi-%{_cc_name} = %{version}-%{release}
 
 %description -n WRF341-openmpi%{?_cc_name_suffix}
@@ -70,7 +70,7 @@ WRF Model.  DM parallel, simple nesting.
 %package -n WPS341-openmpi%{?_cc_name_suffix}
 Summary:        WPS Tools
 Group:          Scientific
-Requires:       netcdf-fortran%{?_cc_name_suffix}-devel%{?_isa}
+Requires:       netcdf-fortran%{?_cc_name_suffix}%{?_isa}
 Requires:       ncl%{?_cc_name_suffix}%{?_isa}
 Provides:       WPS-openmpi-%{_cc_name} = %{version}-%{release}
 
@@ -133,6 +133,7 @@ pushd WPS
 cp -a */src/*.exe $RPM_BUILD_ROOT%{_bindir}
 popd
 sed -e 's#@PREFIX@#%{_prefix}#' < %SOURCE4 > $RPM_BUILD_ROOT%{_bindir}/setupwrf
+chmod +x $RPM_BUILD_ROOT%{_bindir}/setupwrf
 # AltCCRPMS
 # Make the environment-modules file
 #mkdir -p %{buildroot}/etc/modulefiles/%{shortname}/%{_cc_name}
