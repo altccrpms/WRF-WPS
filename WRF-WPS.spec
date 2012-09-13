@@ -28,10 +28,10 @@ URL:            http://www.wrf-model.org/
 Source0:        http://www.mmm.ucar.edu/wrf/src/WRFV%{version}.TAR.gz
 Source1:        http://www.mmm.ucar.edu/wrf/src/WPSV%{version}.TAR.gz
 #This was created using the configure script and then modifying the 
-#result to fix the netcdf locations $(WRF_SRC_ROOT_DIR)/netcdf_links
+#result to fix the netcdf locations
 Source2:        configure.wrf
 #This was created using the configure script and then modifying the
-#result to fix the netcdf locations $(WRF_SRC_ROOT_DIR)/netcdf_links
+#result to fix the netcdf locations
 Source3:        configure.wps
 Source4:        setupwrf.in
 Source5:        wrf.module.in
@@ -80,23 +80,8 @@ WPS Tools.  DM parallel.
 %prep
 %setup -q -c -a 1
 %patch0 -p1 -b .netcdf
-pushd WRFV3
-cp %SOURCE2 configure.wrf
-#openmpi mpif90 wrapper doesn't take the -f90,-cc options
-sed -i.openmpi -r -e 's/ -(f90|cc)=.*//' arch/archive_configure.defaults \
-                                         arch/configure_new.defaults
-mkdir netcdf_links
-ln -s %{_includedir} netcdf_links/include
-ln -s %{_libdir} netcdf_links/lib
-popd
-pushd WPS
-cp %SOURCE3 configure.wps
-#openmpi mpif90 wrapper doesn't take the -f90,-cc options
-sed -i.openmpi -r -e 's/ -(f90|cc)=.*//' arch/configure.defaults
-mkdir netcdf_links
-ln -s %{_includedir} netcdf_links/include
-ln -s %{_libdir} netcdf_links/lib
-popd
+cp %SOURCE2 WRFV3/configure.wrf
+cp %SOURCE3 WPS/configure.wps
 
 
 %build
