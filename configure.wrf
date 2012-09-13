@@ -175,7 +175,7 @@ INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
                       -I$(WRF_SRC_ROOT_DIR)/share \
                       -I$(WRF_SRC_ROOT_DIR)/phys \
                       -I$(WRF_SRC_ROOT_DIR)/chem -I$(WRF_SRC_ROOT_DIR)/inc \
-                      -I$(NETCDF_INCLUDE)/include \
+                      -I$(NETCDF_INCLUDE) \
                       
 REGISTRY        =    Registry
 
@@ -197,7 +197,7 @@ LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL)
 ENVCOMPDEFS     =    
 WRF_CHEM	=	0 
 CPPFLAGS        =    $(ARCHFLAGS) $(ENVCOMPDEFS) -I$(LIBINCLUDE) $(TRADFLAG) 
-NETCDFPATH      =    /scratch/altccrpms/WRF-WPS-3.4.1/WRF-WPS341-pgf-3.4.1/WRFV3/netcdf_links
+NETCDFPATH      =    
 PNETCDFPATH     =    
 
 bundled:  wrf_ioapi_includes wrfio_grib_share wrfio_grib1 wrfio_int esmf_time fftpack 
