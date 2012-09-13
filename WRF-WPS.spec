@@ -5,7 +5,7 @@
 %global _infodir %{_prefix}/share/info
 %global _mandir %{_prefix}/share/man
 
-%global _cc_name intel
+%global _cc_name pgf
 %global _cc_name_suffix -%{_cc_name}
 
 #We don't want to be beholden to the proprietary libraries
@@ -85,23 +85,27 @@ cp %SOURCE2 configure.wrf
 #openmpi mpif90 wrapper doesn't take the -f90,-cc options
 sed -i.openmpi -r -e 's/ -(f90|cc)=.*//' arch/archive_configure.defaults \
                                          arch/configure_new.defaults
+# Load serial netcdf for now
+module load netcdf-fortran/%{_cc_name}
 mkdir netcdf_links
-ln -s %{_includedir} netcdf_links/include
-ln -s %{_libdir} netcdf_links/lib
+ln -s $NETCDF_INCLUDE netcdf_links/include
+ln -s $NETCDF_LIB netcdf_links/lib
 popd
 pushd WPS
 cp %SOURCE3 configure.wps
 #openmpi mpif90 wrapper doesn't take the -f90,-cc options
 sed -i.openmpi -r -e 's/ -(f90|cc)=.*//' arch/configure.defaults
 mkdir netcdf_links
-ln -s %{_includedir} netcdf_links/include
-ln -s %{_libdir} netcdf_links/lib
+ln -s $NETCDF_INCLUDE netcdf_links/include
+ln -s $NETCDF_LIB netcdf_links/lib
 popd
 
 
 %build
 . /etc/profile.d/modules.sh
-module load netcdf-fortran/openmpi-%{_cc_name}
+# Load serial netcdf for now
+module load netcdf-fortran/%{_cc_name}
+module load mpi/openmpi-%{_cc_name}
 # This is set by the openmpi module and interferes with the build
 unset MPI_LIB
 module load ncl/%{_cc_name}

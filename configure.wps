@@ -43,7 +43,7 @@ WRF_LIB         =       -L$(WRF_DIR)/external/io_grib1 -lio_grib1 \
                         -L$(WRF_DIR)/external/io_grib_share -lio_grib_share \
                         -L$(WRF_DIR)/external/io_int -lwrfio_int \
                         -L$(WRF_DIR)/external/io_netcdf -lwrfio_nf \
-                        -L$(NETCDF)/lib -lnetcdff -lnetcdf
+                        -L$(NETCDF_LIB) -lnetcdff -lnetcdf
 
 #### Architecture specific settings ####
 
@@ -52,25 +52,27 @@ COMPRESSION_LIBS	=  # intentionally left blank, fill in COMPRESSION_LIBS below
 COMPRESSION_INC		=  # intentionally left blank, fill in COMPRESSION_INC below
 
 #
-#   Settings for Linux x86_64, Intel compiler    (dmpar) 
+#   Settings for Linux x86_64, PGI compiler   (dmpar) 
 #
 #
 COMPRESSION_LIBS    = -L/usr/lib64 -ljasper -lpng -lz
 COMPRESSION_INC     = -I/usr/include/jasper
 FDEFS               = -DUSE_JPEG2000 -DUSE_PNG
-SFC                 = ifort
-SCC                 = icc 
+#NCARG_LIBS2         = -L${PGI}/linux86-64/5.2/lib -lpgftnrtl -lpgc \
+#                      -L/usr/lib64 -lg2c
+SFC                 = pgf90
+SCC                 = gcc
 DM_FC               = mpif90
 DM_CC               = mpicc
 FC                  = $(DM_FC)
-CC                  = $(DM_CC) 
-LD                  = $(FC)
-FFLAGS              = -FR -convert big_endian -O3 -axSSE2,SSE4.1,SSE4.2 -g
-F77FLAGS            = -FI -convert big_endian -O3 -axSSE2,SSE4.1,SSE4.2 -g
+CC                  = $(DM_CC)
+LD                  = $(FC) 
+FFLAGS              = -Mfree -byteswapio -fastsse -g
+F77FLAGS            = -Mfixed -byteswapio -fastsse -g
 FCSUFFIX            = 
 FNGFLAGS            = $(FFLAGS)
 LDFLAGS             = 
-CFLAGS              = -w -O3 -axSSE2,SSE4.1,SSE4.2 -g
+CFLAGS              = -O -g
 CPP                 = /lib/cpp -C -P -traditional
 CPPFLAGS            = -D_UNDERSCORE -DBYTESWAP -DLINUX -DIO_NETCDF -DIO_BINARY -DIO_GRIB1 -DBIT32 -D_MPI
 ARFLAGS             =
