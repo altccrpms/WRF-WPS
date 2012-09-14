@@ -86,7 +86,9 @@ cp %SOURCE3 WPS/configure.wps
 
 %build
 . /etc/profile.d/modules.sh
-module load netcdf-fortran/openmpi-%{_cc_name}
+# Load serial netcdf for now
+module load netcdf-fortran/%{_cc_name}
+module load mpi/openmpi-%{_cc_name}
 # This is set by the openmpi module and interferes with the build
 unset MPI_LIB
 module load ncl/%{_cc_name}
