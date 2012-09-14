@@ -218,7 +218,7 @@ REGISTRY        =    Registry
                       $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
 
  LIB_EXTERNAL    = \
-                      -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L/scratch/altccrpms/WRF-WPS-3.4.1/WRF-WPS-intel-3.4.1/WRFV3/netcdf_links/lib -lnetcdff -lnetcdf    
+                      -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L$(NETCDF_LIB) -lnetcdff -lnetcdf    
 
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 
