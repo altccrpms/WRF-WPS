@@ -128,15 +128,15 @@ chmod +x $RPM_BUILD_ROOT%{_bindir}/setupwrf
 #< %SOURCE5 > %{buildroot}/etc/modulefiles/%{shortname}/%{_cc_name}/%{version}-%{_arch}
 for mpi in %{mpi_list}
 do
-mkdir -p %{buildroot}/etc/modulefiles/wrf/${mpi}-%{_cc_name}
+mkdir -p %{buildroot}/etc/modulefiles/wrf/${mpi}-%{_cc_name}/%{version}
 sed -e 's#@PREFIX@#'%{_prefix}'#' -e 's#@LIB@#%{_lib}#' -e 's#@ARCH@#%{_arch}#' -e 's#@CC@#%{_cc_name}#'  -e 's#@MPI@#'$mpi'#' \
-    < %SOURCE5 > %{buildroot}/etc/modulefiles/wrf/${mpi}-%{_cc_name}/%{version}-%{_arch}
+    < %SOURCE5 > %{buildroot}/etc/modulefiles/wrf/${mpi}-%{_cc_name}/%{version}/%{_arch}
 done
 for mpi in %{mpi_list}
 do
-mkdir -p %{buildroot}/etc/modulefiles/wps/${mpi}-%{_cc_name}
+mkdir -p %{buildroot}/etc/modulefiles/wps/${mpi}-%{_cc_name}/%{version}
 sed -e 's#@PREFIX@#'%{_prefix}'#' -e 's#@LIB@#%{_lib}#' -e 's#@ARCH@#%{_arch}#' -e 's#@CC@#%{_cc_name}#'  -e 's#@MPI@#'$mpi'#' \
-    < %SOURCE6 > %{buildroot}/etc/modulefiles/wps/${mpi}-%{_cc_name}/%{version}-%{_arch}
+    < %SOURCE6 > %{buildroot}/etc/modulefiles/wps/${mpi}-%{_cc_name}/%{version}/%{_arch}
 done
 
 
@@ -146,7 +146,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n WRF341-openmpi%{?_cc_name_suffix}
 %doc
-/etc/modulefiles/wrf/openmpi-%{_cc_name}/%{version}-%{_arch}
+/etc/modulefiles/wrf/openmpi-%{_cc_name}/
 %{_bindir}/ndown.exe
 %{_bindir}/nup.exe
 %{_bindir}/tc.exe
@@ -157,7 +157,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n WPS341-openmpi%{?_cc_name_suffix}
 %doc
-/etc/modulefiles/wps/openmpi-%{_cc_name}/%{version}-%{_arch}
+/etc/modulefiles/wps/openmpi-%{_cc_name}/
 %{_bindir}/avg_tsfc.exe
 %{_bindir}/calc_ecmwf_p.exe
 %{_bindir}/g1print.exe
