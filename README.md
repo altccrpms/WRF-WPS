@@ -11,9 +11,11 @@ To run WRF you generally create a run directory to hold the input in and
 output data.  After creating this directory and putting in the necessary
 input data and namelist.input file, run:
 
-> module load wrf/openmpi-%compiler%
-> setupwrf
-> mpirun -np %processes% wrf.exe
+<pre>
+module load wrf/openmpi-%compiler%
+setupwrf
+mpirun -np %processes% wrf.exe
+</pre>
 
 The setupwrf command will link in the standard input files into the current
 directory.  This only needs to be done one per run directory.
