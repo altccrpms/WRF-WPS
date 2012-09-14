@@ -443,48 +443,48 @@ nl_get_1_routines.o : nl_get_1_routines.F
 nl_set_0_routines.o : nl_set_0_routines.F
 nl_set_1_routines.o : nl_set_1_routines.F
 
-#mediation_integrate.o \
-#track_driver.o \
-#convert_nmm.o \
-#init_modules_em.o \
-#module_dm.o \
-#module_fddaobs_rtfdda.o \
-#module_initialize.o \
-#module_initialize_b_wave.o \
-#module_initialize_hill2d_x.o \
-##module_initialize_quarter_ss.o \
-#module_initialize_real.o \
-#module_initialize_squall2d_x.o \
-#module_initialize_squall2d_y.o \
-#module_initialize_scm_xy.o \
-#module_integrate.o \
-#module_io_mm5.o \
-#module_io_wrf.o \
-#module_si_io.o \
-#module_wps_io_arw.o \
-#module_tiles.o \
-#output_wrf.o \
-#solve_interface.o \
-#start_domain.o \
-#start_em.o \
-#wrf_fddaobs_in.o \
-#wrf_tsin.o :
-#	$(RM) $@
-#	$(SED_FTN) $*.F > $*.b 
-#	$(CPP) -I$(WRF_SRC_ROOT_DIR)/inc $(CPPFLAGS) $(OMPCPP) $*.b  > $*.f90
-#	$(RM) $*.b
-#	@ if echo $(ARCHFLAGS) | $(FGREP) 'DVAR4D'; then \
-#          echo COMPILING $*.F for 4DVAR ; \
-#          $(WRF_SRC_ROOT_DIR)/var/build/da_name_space.pl $*.f90 > $*.f90.tmp ; \
-#          mv $*.f90.tmp $*.f90 ; \
-#        fi
-#	if $(FGREP) '!$$OMP' $*.f90 ; then \
-#          if [ -n "$(OMP)" ] ; then echo COMPILING $*.F WITH OMP ; fi ; \
-#	  $(FC) -c $(PROMOTION) $(FCNOOPT) $(FCBASEOPTS) $(MODULE_DIRS) $(FCSUFFIX) $(OMP) $*.f90 ; \
-#        else \
-#          if [ -n "$(OMP)" ] ; then echo COMPILING $*.F WITHOUT OMP ; fi ; \
-#	  $(FC) -c $(PROMOTION) $(FCNOOPT) $(FCBASEOPTS) $(MODULE_DIRS) $(FCSUFFIX) $*.f90 ; \
-#        fi
+mediation_integrate.o \
+track_driver.o \
+convert_nmm.o \
+init_modules_em.o \
+module_dm.o \
+module_fddaobs_rtfdda.o \
+module_initialize.o \
+module_initialize_b_wave.o \
+module_initialize_hill2d_x.o \
+module_initialize_quarter_ss.o \
+module_initialize_real.o \
+module_initialize_squall2d_x.o \
+module_initialize_squall2d_y.o \
+module_initialize_scm_xy.o \
+module_integrate.o \
+module_io_mm5.o \
+module_io_wrf.o \
+module_si_io.o \
+module_wps_io_arw.o \
+module_tiles.o \
+output_wrf.o \
+solve_interface.o \
+start_domain.o \
+start_em.o \
+wrf_fddaobs_in.o \
+wrf_tsin.o :
+	$(RM) $@
+	$(SED_FTN) $*.F > $*.b 
+	$(CPP) -I$(WRF_SRC_ROOT_DIR)/inc $(CPPFLAGS) $(OMPCPP) $*.b  > $*.f90
+	$(RM) $*.b
+	@ if echo $(ARCHFLAGS) | $(FGREP) 'DVAR4D'; then \
+          echo COMPILING $*.F for 4DVAR ; \
+          $(WRF_SRC_ROOT_DIR)/var/build/da_name_space.pl $*.f90 > $*.f90.tmp ; \
+          mv $*.f90.tmp $*.f90 ; \
+        fi
+	if $(FGREP) '!$$OMP' $*.f90 ; then \
+          if [ -n "$(OMP)" ] ; then echo COMPILING $*.F WITH OMP ; fi ; \
+	  $(FC) -c $(PROMOTION) $(FCNOOPT) $(FCBASEOPTS) $(MODULE_DIRS) $(FCSUFFIX) $(OMP) $*.f90 ; \
+        else \
+          if [ -n "$(OMP)" ] ; then echo COMPILING $*.F WITHOUT OMP ; fi ; \
+	  $(FC) -c $(PROMOTION) $(FCNOOPT) $(FCBASEOPTS) $(MODULE_DIRS) $(FCSUFFIX) $*.f90 ; \
+        fi
 
 #solve_em.o :
 #	$(RM) $@
