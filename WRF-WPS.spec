@@ -114,6 +114,13 @@ rm $RPM_BUILD_ROOT%{_datadir}/WRFV3/run/*.exe \
    $RPM_BUILD_ROOT%{_datadir}/WRFV3/run/namelist.input
 cp -a test/em_real $RPM_BUILD_ROOT%{_datadir}/WRFV3/test
 rm $RPM_BUILD_ROOT%{_datadir}/WRFV3/test/em_real/*.exe
+# diffwrf
+for x in external/io_*/diffwrf
+do
+   dir=$(dirname $x)
+   io=${dir/*io_/}
+   cp -a $x $RPM_BUILD_ROOT%{_bindir}/diffwrf_$io
+done
 popd
 pushd WPS
 cp -a */src/*.exe $RPM_BUILD_ROOT%{_bindir}
@@ -147,6 +154,9 @@ rm -rf $RPM_BUILD_ROOT
 %files -n WRF341-openmpi%{?_cc_name_suffix}
 %doc
 /etc/modulefiles/wrf/openmpi-%{_cc_name}/
+%{_bindir}/diffwrf_grib1
+%{_bindir}/diffwrf_int
+%{_bindir}/diffwrf_netcdf
 %{_bindir}/ndown.exe
 %{_bindir}/nup.exe
 %{_bindir}/tc.exe
