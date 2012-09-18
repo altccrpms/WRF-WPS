@@ -48,7 +48,7 @@ BuildRequires:  libpng-devel
 BuildRequires:  ncl%{?_cc_name_suffix}-static%{?_isa}
 BuildRequires:  netcdf-fortran%{?_cc_name_suffix}-devel%{?_isa}
 BuildRequires:  numactl-devel
-#BuildRequires:  openmpi%{?_cc_name_suffix}-devel
+BuildRequires:  openmpi%{?_cc_name_suffix}-devel%{?_isa}
 
 
 %description
@@ -60,6 +60,7 @@ srpm.
 Summary:        WRF Model
 Group:          Scientific
 Requires:       netcdf-fortran%{?_cc_name_suffix}%{?_isa}
+Provides:       WRF-openmpi-%{_cc_name}%{?_isa} = %{version}-%{release}
 Provides:       WRF-openmpi-%{_cc_name} = %{version}-%{release}
 
 %description -n WRF341-openmpi%{?_cc_name_suffix}
@@ -71,7 +72,9 @@ Summary:        WPS Tools
 Group:          Scientific
 Requires:       netcdf-fortran%{?_cc_name_suffix}%{?_isa}
 Requires:       ncl%{?_cc_name_suffix}%{?_isa}
+Provides:       WPS-openmpi-%{_cc_name}%{?_isa} = %{version}-%{release}
 Provides:       WPS-openmpi-%{_cc_name} = %{version}-%{release}
+Requires:       WRF-openmpi-%{_cc_name} = %{version}-%{release}
 
 %description -n WPS341-openmpi%{?_cc_name_suffix}
 WPS Tools.  DM parallel.
