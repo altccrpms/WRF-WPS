@@ -1,5 +1,5 @@
 %global shortname WRF-WPS 
-%global ver 3.8.1
+%global ver 3.9.1
 %?altcc_init
 
 Name:           %{shortname}%{?altcc_pkg_suffix}
@@ -9,7 +9,7 @@ Summary:        WRF Model and WPS tools
 
 License:        Public Domain
 URL:            http://www.wrf-model.org/
-Source0:        http://www2.mmm.ucar.edu/wrf/src/WRFV%{version}.TAR.gz
+Source0:        http://www2.mmm.ucar.edu/wrf/src/WRFV%{version}.1.TAR.gz
 #This was created using the configure script and then modifying the 
 #result
 Source1:        configure.wrf-gfortran
@@ -160,6 +160,9 @@ chmod +x %{buildroot}%{_bindir}/setupwrf
 
 
 %changelog
+* Thu Apr 19 2018 Orion Poplawski <orion@nwra.com> 3.9.1.1-1
+- Update to 3.9.1.1
+
 * Thu Sep 29 2016 Orion Poplawski <orion@cora.nwra.com> 3.8.1-1
 - Update to 3.8.1
 - Compile with -ipo for Intel version

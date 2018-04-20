@@ -66,12 +66,12 @@ DM_CC               = mpicc -cc=icc
 FC                  = $(SFC)
 CC                  = $(SCC)
 LD                  = $(FC)
-FFLAGS              = -FR -convert big_endian -axSSE3,SSSE3,SSE4.1,SSE4.2,CORE-AVX2,COMMON-AVX512
-F77FLAGS            = -FI -convert big_endian -axSSE3,SSSE3,SSE4.1,SSE4.2,CORE-AVX2,COMMON-AVX512
+FFLAGS              = -FR -convert big_endian -axSSE4.1,SSE4.2,AVX,CORE-AVX2
+F77FLAGS            = -FI -convert big_endian -axSSE4.1,SSE4.2,AVX,CORE-AVX2
 FCSUFFIX            = 
 FNGFLAGS            = $(FFLAGS)
 LDFLAGS             = 
-CFLAGS              = -w -axSSE3,SSSE3,SSE4.1,SSE4.2,CORE-AVX2,COMMON-AVX512
+CFLAGS              = -w -axSSE4.1,SSE4.2,AVX,CORE-AVX2
 CPP                 = cpp -P -traditional
 CPPFLAGS            = -D_UNDERSCORE -DBYTESWAP -DLINUX -DIO_NETCDF -DIO_BINARY -DIO_GRIB1 -DBIT32 
 ARFLAGS             =
