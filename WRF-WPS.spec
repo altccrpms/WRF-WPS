@@ -23,8 +23,6 @@ Source11:       configure.wps-gfortran
 Source12:       configure.wps-pgf
 Source13:       configure.wps-intel
 Source20:       setupwrf
-# Fix linking against netcdf
-Patch2:         WRF-WPS-netcdf.patch
 
 BuildRequires:  tcsh
 BuildRequires:  m4
@@ -63,7 +61,6 @@ WPS Tools.
 
 %prep
 %setup -q -c -a 10
-#patch2 -p1 -b .netcdf
 pushd WRF-%{version}
 [ -z "${COMPILER_NAME}" ] && export COMPILER_NAME=gfortran
 cp %{_sourcedir}/configure.wrf-${COMPILER_NAME} configure.wrf
