@@ -1,5 +1,5 @@
 %global shortname WRF-WPS 
-%global ver 3.9.1
+%global ver 4.1.3
 %?altcc_init
 
 Name:           %{shortname}%{?altcc_pkg_suffix}
@@ -9,14 +9,14 @@ Summary:        WRF Model and WPS tools
 
 License:        Public Domain
 URL:            http://www.wrf-model.org/
-Source0:        http://www2.mmm.ucar.edu/wrf/src/WRFV%{version}.1.TAR.gz
+Source0:        https://github.com/wrf-model/WRF/archive/v%{version}/WRF-%{version}.tar.gz
 #This was created using the configure script and then modifying the 
 #result
 Source1:        configure.wrf-gfortran
 Source2:        configure.wrf-pgf
 Source3:        configure.wrf-intel
 Source4:        wrf.module.in
-Source10:       http://www2.mmm.ucar.edu/wrf/src/WPSV%{version}.TAR.gz
+Source10:       https://github.com/wrf-model/WPS/archive/v4.1/WPS-4.1.tar.gz
 #This was created using the configure script and then modifying the
 #result
 Source11:       configure.wps-gfortran
@@ -63,8 +63,8 @@ WPS Tools.
 
 %prep
 %setup -q -c -a 10
-%patch2 -p1 -b .netcdf
-pushd WRFV3
+#patch2 -p1 -b .netcdf
+pushd WRF-%{version}
 [ -z "${COMPILER_NAME}" ] && export COMPILER_NAME=gfortran
 cp %{_sourcedir}/configure.wrf-${COMPILER_NAME} configure.wrf
 %if 0%{?rhel} && 0%{?rhel} <= 7
@@ -73,7 +73,7 @@ cp %{_sourcedir}/configure.wrf-${COMPILER_NAME} configure.wrf
   sed -i -e '/^ARCH_LOCAL/s/$/ -DNO_IEEE_MODULE/' configure.wrf
 %endif
 popd
-pushd WPS
+pushd WPS-4.1
 cp %{_sourcedir}/configure.wps-${COMPILER_NAME} configure.wps
 popd
 
@@ -90,32 +90,30 @@ fi
 export JASPERINC=/usr/include/jasper
 export JASPERLIB=/usr/%{_lib}
 export J=$(echo %{?_smp_mflags} | sed 's/-j/-j /')
-pushd WRFV3
+pushd WRF-%{version}
 ./compile em_real
 popd
-pushd WPS
+pushd WPS-4.1
 ./compile
-# To explicitly compile plotfmt and plotgrids
-./compile util
 popd
 
 
 %install
-pushd WRFV3
+pushd WRF-%{version}
 mkdir -p %{buildroot}%{_bindir}
 cp -a main/*.exe %{buildroot}%{_bindir}
-mkdir -p %{buildroot}%{_datadir}/WRFV3/test
-cp -a run %{buildroot}%{_datadir}/WRFV3
-rm %{buildroot}%{_datadir}/WRFV3/run/*.exe \
-   %{buildroot}%{_datadir}/WRFV3/run/namelist.input
-cp -a test/em_real %{buildroot}%{_datadir}/WRFV3/test
-rm %{buildroot}%{_datadir}/WRFV3/test/em_real/*.exe
+mkdir -p %{buildroot}%{_datadir}/WRF-%{version}/test
+cp -a run %{buildroot}%{_datadir}/WRF-%{version}
+rm %{buildroot}%{_datadir}/WRF-%{version}/run/*.exe \
+   %{buildroot}%{_datadir}/WRF-%{version}/run/namelist.input
+cp -a test/em_real %{buildroot}%{_datadir}/WRF-%{version}/test
+rm %{buildroot}%{_datadir}/WRF-%{version}/test/em_real/*.exe
 popd
-pushd WPS
-cp -a */src/*.exe %{buildroot}%{_bindir}
-mkdir -p %{buildroot}%{_datadir}/WRFV3/{geogrid,metgrid}
-cp -a geogrid/*TBL* geogrid/gribmap.txt %{buildroot}%{_datadir}/WRFV3/geogrid
-cp -a metgrid/*TBL* metgrid/gribmap.txt %{buildroot}%{_datadir}/WRFV3/metgrid
+pushd WPS-4.1
+cp -a *.exe util/*.exe %{buildroot}%{_bindir}
+mkdir -p %{buildroot}%{_datadir}/WRF-%{version}/{geogrid,metgrid}
+cp -a geogrid/*TBL* geogrid/gribmap.txt %{buildroot}%{_datadir}/WRF-%{version}/geogrid
+cp -a metgrid/*TBL* metgrid/gribmap.txt %{buildroot}%{_datadir}/WRF-%{version}/metgrid
 popd
 sed -e s,@DATADIR@,%{_datadir},g < %SOURCE20 > %{buildroot}%{_bindir}/setupwrf
 chmod +x %{buildroot}%{_bindir}/setupwrf
@@ -133,9 +131,9 @@ chmod +x %{buildroot}%{_bindir}/setupwrf
 %{_bindir}/real.exe
 %{_bindir}/wrf.exe
 %{_bindir}/setupwrf
-%dir %{_datadir}/WRFV3
-%{_datadir}/WRFV3/run/
-%{_datadir}/WRFV3/test/
+%dir %{_datadir}/WRF-%{version}
+%{_datadir}/WRF-%{version}/run/
+%{_datadir}/WRF-%{version}/test/
 
 
 %files -n WPS%{?altcc_pkg_suffix}
@@ -154,12 +152,15 @@ chmod +x %{buildroot}%{_bindir}/setupwrf
 %{_bindir}/plotgrids.exe
 %{_bindir}/rd_intermediate.exe
 %{_bindir}/ungrib.exe
-%dir %{_datadir}/WRFV3
-%{_datadir}/WRFV3/geogrid/
-%{_datadir}/WRFV3/metgrid/
+%dir %{_datadir}/WRF-%{version}
+%{_datadir}/WRF-%{version}/geogrid/
+%{_datadir}/WRF-%{version}/metgrid/
 
 
 %changelog
+* Thu Jan 30 2020 Orion Poplawski <orion@nwra.com> 4.1.3-1
+- Update to 4.1.3
+
 * Thu Apr 19 2018 Orion Poplawski <orion@nwra.com> 3.9.1.1-1
 - Update to 3.9.1.1
 
