@@ -4,9 +4,9 @@
 #
 
 # Links to data files
-ln -s @DATADIR@/WRFV3/run/* .
+ln -s @DATADIR@/WRF/run/* .
 
 # Default namelist.input if it doesn't exist
-[ ! -f namelist.input ] && cp -a @DATADIR@/WRFV3/test/em_real/namelist.input .
+[ ! -f namelist.input ] && cp -a @DATADIR@/WRF/test/em_real/namelist.input .
 
 exit 0

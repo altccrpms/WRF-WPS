@@ -61,7 +61,9 @@ WPS Tools.
 
 %prep
 %setup -q -c -a 10
-pushd WRF-%{version}
+# WPS configure will look for WRF
+mv WRF-%{version} WRF
+pushd WRF
 [ -z "${COMPILER_NAME}" ] && export COMPILER_NAME=gfortran
 cp %{_sourcedir}/configure.wrf-${COMPILER_NAME} configure.wrf
 %if 0%{?rhel} && 0%{?rhel} <= 7
@@ -87,30 +89,32 @@ fi
 export JASPERINC=/usr/include/jasper
 export JASPERLIB=/usr/%{_lib}
 export J=$(echo %{?_smp_mflags} | sed 's/-j/-j /')
-pushd WRF-%{version}
+pushd WRF
 ./compile em_real
 popd
 pushd WPS-4.1
 ./compile
+# To explicitly compile plotfmt and plotgrids
+./compile util
 popd
 
 
 %install
-pushd WRF-%{version}
+pushd WRF
 mkdir -p %{buildroot}%{_bindir}
 cp -a main/*.exe %{buildroot}%{_bindir}
-mkdir -p %{buildroot}%{_datadir}/WRF-%{version}/test
-cp -a run %{buildroot}%{_datadir}/WRF-%{version}
-rm %{buildroot}%{_datadir}/WRF-%{version}/run/*.exe \
-   %{buildroot}%{_datadir}/WRF-%{version}/run/namelist.input
-cp -a test/em_real %{buildroot}%{_datadir}/WRF-%{version}/test
-rm %{buildroot}%{_datadir}/WRF-%{version}/test/em_real/*.exe
+mkdir -p %{buildroot}%{_datadir}/WRF/test
+cp -a run %{buildroot}%{_datadir}/WRF
+rm %{buildroot}%{_datadir}/WRF/run/*.exe \
+   %{buildroot}%{_datadir}/WRF/run/namelist.input
+cp -a test/em_real %{buildroot}%{_datadir}/WRF/test
+rm %{buildroot}%{_datadir}/WRF/test/em_real/*.exe
 popd
 pushd WPS-4.1
 cp -a *.exe util/*.exe %{buildroot}%{_bindir}
-mkdir -p %{buildroot}%{_datadir}/WRF-%{version}/{geogrid,metgrid}
-cp -a geogrid/*TBL* geogrid/gribmap.txt %{buildroot}%{_datadir}/WRF-%{version}/geogrid
-cp -a metgrid/*TBL* metgrid/gribmap.txt %{buildroot}%{_datadir}/WRF-%{version}/metgrid
+mkdir -p %{buildroot}%{_datadir}/WRF/{geogrid,metgrid}
+cp -a geogrid/*TBL* geogrid/gribmap.txt %{buildroot}%{_datadir}/WRF/geogrid
+cp -a metgrid/*TBL* metgrid/gribmap.txt %{buildroot}%{_datadir}/WRF/metgrid
 popd
 sed -e s,@DATADIR@,%{_datadir},g < %SOURCE20 > %{buildroot}%{_bindir}/setupwrf
 chmod +x %{buildroot}%{_bindir}/setupwrf
@@ -128,9 +132,9 @@ chmod +x %{buildroot}%{_bindir}/setupwrf
 %{_bindir}/real.exe
 %{_bindir}/wrf.exe
 %{_bindir}/setupwrf
-%dir %{_datadir}/WRF-%{version}
-%{_datadir}/WRF-%{version}/run/
-%{_datadir}/WRF-%{version}/test/
+%dir %{_datadir}/WRF
+%{_datadir}/WRF/run/
+%{_datadir}/WRF/test/
 
 
 %files -n WPS%{?altcc_pkg_suffix}
@@ -149,9 +153,9 @@ chmod +x %{buildroot}%{_bindir}/setupwrf
 %{_bindir}/plotgrids.exe
 %{_bindir}/rd_intermediate.exe
 %{_bindir}/ungrib.exe
-%dir %{_datadir}/WRF-%{version}
-%{_datadir}/WRF-%{version}/geogrid/
-%{_datadir}/WRF-%{version}/metgrid/
+%dir %{_datadir}/WRF
+%{_datadir}/WRF/geogrid/
+%{_datadir}/WRF/metgrid/
 
 
 %changelog

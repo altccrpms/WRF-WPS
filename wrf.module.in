@@ -8,4 +8,4 @@ module load netcdf
 
 prepend-path 	PATH 		@PREFIX@/bin
 setenv		WRF_HOME	@PREFIX@
-setenv		WRF_DATA	@DATADIR@/WRFV3
+setenv		WRF_DATA	@DATADIR@/WRF
