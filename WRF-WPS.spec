@@ -1,5 +1,6 @@
 %global shortname WRF-WPS 
-%global ver 4.1.3
+%global ver 4.2
+%global wps_version %{ver}
 %?altcc_init
 
 Name:           %{shortname}%{?altcc_pkg_suffix}
@@ -16,13 +17,15 @@ Source1:        configure.wrf-gfortran
 Source2:        configure.wrf-pgf
 Source3:        configure.wrf-intel
 Source4:        wrf.module.in
-Source10:       https://github.com/wrf-model/WPS/archive/v4.1/WPS-4.1.tar.gz
+Source10:       https://github.com/wrf-model/WPS/archive/v%{wps_version}/WPS-%{wps_version}.tar.gz
 #This was created using the configure script and then modifying the
 #result
 Source11:       configure.wps-gfortran
 Source12:       configure.wps-pgf
 Source13:       configure.wps-intel
 Source20:       setupwrf
+# Fix io_netcdf linking
+Patch0:         WRF-WPS-netcdf.patch
 
 BuildRequires:  tcsh
 BuildRequires:  m4
@@ -63,6 +66,7 @@ WPS Tools.
 %setup -q -c -a 10
 # WPS configure will look for WRF
 mv WRF-%{version} WRF
+%patch0 -p1 -b .netcdf
 pushd WRF
 [ -z "${COMPILER_NAME}" ] && export COMPILER_NAME=gfortran
 cp %{_sourcedir}/configure.wrf-${COMPILER_NAME} configure.wrf
@@ -72,7 +76,7 @@ cp %{_sourcedir}/configure.wrf-${COMPILER_NAME} configure.wrf
   sed -i -e '/^ARCH_LOCAL/s/$/ -DNO_IEEE_MODULE/' configure.wrf
 %endif
 popd
-pushd WPS-4.1
+pushd WPS-%{wps_version}
 cp %{_sourcedir}/configure.wps-${COMPILER_NAME} configure.wps
 popd
 
@@ -92,7 +96,7 @@ export J=$(echo %{?_smp_mflags} | sed 's/-j/-j /')
 pushd WRF
 ./compile em_real
 popd
-pushd WPS-4.1
+pushd WPS-%{wps_version}
 ./compile
 # To explicitly compile plotfmt and plotgrids
 ./compile util
@@ -110,7 +114,7 @@ rm %{buildroot}%{_datadir}/WRF/run/*.exe \
 cp -a test/em_real %{buildroot}%{_datadir}/WRF/test
 rm %{buildroot}%{_datadir}/WRF/test/em_real/*.exe
 popd
-pushd WPS-4.1
+pushd WPS-%{wps_version}
 cp -a *.exe util/*.exe %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_datadir}/WRF/{geogrid,metgrid}
 cp -a geogrid/*TBL* geogrid/gribmap.txt %{buildroot}%{_datadir}/WRF/geogrid
@@ -159,6 +163,9 @@ chmod +x %{buildroot}%{_bindir}/setupwrf
 
 
 %changelog
+* Tue Jun 9 2020 Orion Poplawski <orion@nwra.com> 4.2-1
+- Update to 4.2
+
 * Thu Jan 30 2020 Orion Poplawski <orion@nwra.com> 4.1.3-1
 - Update to 4.1.3
 

@@ -15,7 +15,7 @@
 
 SHELL           	=       /bin/sh
 
-NCARG_LIBS		=	-L$(NCARG_ROOT)/lib -lncarg -lncarg_gks -lncarg_c \
+NCARG_LIBS		=	-L$(NCARG_LIB) -lncarg -lncarg_gks -lncarg_c \
 				-lX11 -lXext -lpng -lz -lcairo -lfontconfig -lpixman-1 \
 				-lfreetype -lexpat -lpthread -lbz2 -lXrender -lgfortran -lgcc
 

@@ -93,7 +93,7 @@ ESMF_TARGET         = esmf_time
 NETCDF4_IO_OPTS = -DUSE_NETCDF4_FEATURES -DWRFIO_NCD_LARGE_FILE_SUPPORT
 GPFS            =
 CURL            =
-HDF5            = -lhdf5 -lhdf5_hl
+HDF5            = -lhdf5_hl -lhdf5
 ZLIB            = -lz
 DEP_LIB_PATH    = -L$(NETCDF_LIB)
 NETCDF4_DEP_LIB = $(DEP_LIB_PATH) $(HDF5) $(ZLIB) $(GPFS) $(CURL)
@@ -104,6 +104,19 @@ NETCDF4_DEP_LIB = $(DEP_LIB_PATH) $(HDF5) $(ZLIB) $(GPFS) $(CURL)
 ##############################################################################
 
 LIBWRFLIB = libwrflib.a
+
+ LIB_BUNDLED     = \
+                      $(WRF_SRC_ROOT_DIR)/external/fftpack/fftpack5/libfftpack.a \
+                      $(WRF_SRC_ROOT_DIR)/external/io_grib1/libio_grib1.a \
+                      $(WRF_SRC_ROOT_DIR)/external/io_grib_share/libio_grib_share.a \
+                      $(WRF_SRC_ROOT_DIR)/external/io_int/libwrfio_int.a \
+                      $(ESMF_IO_LIB) \
+                      $(WRF_SRC_ROOT_DIR)/external/RSL_LITE/librsl_lite.a \
+                      $(WRF_SRC_ROOT_DIR)/frame/module_internal_header_util.o \
+                      $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o
+
+ LIB_EXTERNAL    = \
+                      -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L$(NETCDF_LIB) -lnetcdff -lnetcdf -L$(HDF5_LIB) -lhdf5hl_fortran -lhdf5_hl -lhdf5_fortran -lhdf5 -lm -lz
 
 
 #### Architecture specific settings ####
@@ -158,8 +171,8 @@ CC              =       $(DM_CC) -DFSEEKO64_OK
 LD              =       $(FC)
 RWORDSIZE       =       $(NATIVE_RWORDSIZE)
 PROMOTION       =       -real-size `expr 8 \* $(RWORDSIZE)` -i4
-ARCH_LOCAL      =       -DNONSTANDARD_SYSTEM_FUNC  -DWRF_USE_CLM $(NETCDF4_IO_OPTS)
-CFLAGS_LOCAL    =       -w -O3 -ip -axSSE4.1,SSE4.2,AVX,CORE-AVX2 -ipo #-xHost -fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -no-multibyte-chars
+ARCH_LOCAL      =       -DNONSTANDARD_SYSTEM_FUNC  -DWRF_USE_CLM $(NETCDF4_IO_OPTS) -DRPC_TYPES=1
+CFLAGS_LOCAL    =       -w -O3 -ip -axSSE4.1,SSE4.2,AVX,CORE-AVX2 -ipo #-xHost -fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -no-multibyte-chars # -DRSL0_ONLY
 LDFLAGS_LOCAL   =       -ip #-xHost -fp-model fast=2 -no-prec-div -no-prec-sqrt -ftz -align all -fno-alias -fno-common
 CPLUSPLUSLIB    =       
 ESMF_LDFLAG     =       $(CPLUSPLUSLIB)
@@ -201,7 +214,7 @@ ARCHFLAGS       =    $(COREDEFS) -DIWORDSIZE=$(IWORDSIZE) -DDWORDSIZE=$(DWORDSIZ
                        \
                        \
                        \
-                       \
+                      -DHDF5 \
                        \
                        \
                        -DLANDREAD_STUB=1 \
@@ -213,7 +226,9 @@ ARCHFLAGS       =    $(COREDEFS) -DIWORDSIZE=$(IWORDSIZE) -DDWORDSIZE=$(DWORDSIZ
                       -DINTIO \
                       -DKEEP_INT_AROUND \
                       -DLIMIT_ARGS \
-                      -DBUILD_RRTMG_FAST=1 \
+                      -DBUILD_RRTMG_FAST=0 \
+                      -DBUILD_RRTMK=0 \
+                      -DBUILD_SBM_FAST=1 \
                       -DSHOW_ALL_VARS_USED=0 \
                       -DCONFIG_BUF_LEN=$(CONFIG_BUF_LEN) \
                       -DMAX_DOMAINS_F=$(MAX_DOMAINS) \
@@ -242,26 +257,13 @@ INCLUDE_MODULES =    $(MODULE_SRCH_FLAG) \
 REGISTRY        =    Registry
 CC_TOOLS_CFLAGS = -DNMM_CORE=$(WRF_NMM_CORE)
 
- LIB_BUNDLED     = \
-                      $(WRF_SRC_ROOT_DIR)/external/fftpack/fftpack5/libfftpack.a \
-                      $(WRF_SRC_ROOT_DIR)/external/io_grib1/libio_grib1.a \
-                      $(WRF_SRC_ROOT_DIR)/external/io_grib_share/libio_grib_share.a \
-                      $(WRF_SRC_ROOT_DIR)/external/io_int/libwrfio_int.a \
-                      $(ESMF_IO_LIB) \
-                      $(WRF_SRC_ROOT_DIR)/external/RSL_LITE/librsl_lite.a \
-                      $(WRF_SRC_ROOT_DIR)/frame/module_internal_header_util.o \
-                      $(WRF_SRC_ROOT_DIR)/frame/pack_utils.o 
-
- LIB_EXTERNAL    = \
-                      -L$(WRF_SRC_ROOT_DIR)/external/io_netcdf -lwrfio_nf -L$(NETCDF_LIB) -lnetcdff -lnetcdf     
-
 LIB             =    $(LIB_BUNDLED) $(LIB_EXTERNAL) $(LIB_LOCAL) $(LIB_WRF_HYDRO) $(NETCDF4_DEP_LIB)
 LDFLAGS         =    $(OMP) $(FCFLAGS) $(LDFLAGS_LOCAL) 
 ENVCOMPDEFS     =    
 WRF_CHEM	=	0 
 CPPFLAGS        =    $(ARCHFLAGS) $(ENVCOMPDEFS) -I$(LIBINCLUDE) $(TRADFLAG) 
 NETCDFPATH      =    $(NETCDF_HOME)
-HDF5PATH        =    
+HDF5PATH        =    $(HDF5_HOME)
 WRFPLUSPATH     =    
 RTTOVPATH       =    
 PNETCDFPATH     =    
